@@ -4,20 +4,19 @@ Belov A. (100%)
 
 """
 
-# This program helps the user create secure passwords
+# This program helps the user create extra secure passwords.
 
 # Asking user for maximum length of a password he wants
 usermaxchar = None
+answer = None
+
 while usermaxchar is None:
     usermaxchar = input("What is the maximum length of a password you can remember?")
     if usermaxchar.isdigit() is False:
         print("ERROR: Incorrect input.")
     elif int(usermaxchar) > 20:
-        print("It is highly inadvisable to overestimate one's memory.")
-        usermaxchar = None
-    elif int(usermaxchar) < 5:
-        print("It is highly inadvisable to underestimate one's memory.")
-        usermaxchar = None
+        # Making sure the user understands their intentions.
+        print("Are you sure you want a password longer than 20 characters?")
         while answer is None:
             answer = input("Continue? Y/N")
             if answer == "Y":
@@ -26,10 +25,27 @@ while usermaxchar is None:
                 print("A wise choice. Going back.")
                 usermaxchar = None
             else:
-                print("\nERROR: Incorrect input.")
+                print("ERROR: Incorrect input.")
+                answer = None
+
+    elif int(usermaxchar) < 5:
+        print("Are you sure you want a password shorter than 5 characters?")
+        while answer is None:
+            answer = input("Continue? Y/N")
+            if answer == "Y":
+                print("Continuing...")
+            elif answer == "N":
+                print("A wise choice. Going back.")
+                usermaxchar = None
+            else:
+                print("ERROR: Incorrect input.")
                 answer = None
     else: continue
+
+# Making usermaxchar an integer for math manipulations later
 usermaxchar = int(usermaxchar)
+# Resetting answer to be None
+answer = None
 
 # Asking the user to input some string in for further manipulation
 userstring = None
@@ -38,42 +54,37 @@ while userstring is None:
     if len(userstring) < 3:
         print("ERROR: Length is too short, try again, please.")
         userstring = None
+
     elif len(userstring) > usermaxchar:
-        print("Input length is over ", usermaxchar - 4, ", this password will be hard to remember, continue?", sep="")
+        print("Input length is over ", usermaxchar, ", this password will be hard to remember, continue?")
         answer = input("If yes, write \"yes\", please.")
         if answer == "yes":
             continue
         else:
-            print("Cutting input to fit", usermaxchar, "characters...")
+            print("Shortening input to fit", usermaxchar, "characters...")
             userstring = userstring[0:int(usermaxchar - 1)]
 
 # Strengthening user generated password with user's date of birth
-# As safety labs have proven, it's more important to have a long
+# As safety labs have concluded, it's more important to have a long
 # unbruteforceable password than a laconic random one
+
 print("Now we get to the magic of all secure passwords.")
 userdateofbirth = None
 while userdateofbirth is None:
     userdateofbirth = input("What is the year you were born?")
-    if userdateofbirth.isdigit() is False:
-        print("ERROR: Incorrect input.")
+    if userdateofbirth.isdigit() is False or int(userdateofbirth) > 9999 or int(userdateofbirth) < 1848:
+        print("ERROR: Please, input years from 1848 to 9999.")
         userdateofbirth = None
-    elif int(userdateofbirth) > 3019:
-        print("Does humanity still exist after over 1000 years of writing this code?")
-        print("I don't really trust you. You've most likely made a typo.")
-        userdateofbirth = None
-    elif int(userdateofbirth) < 1900:
-        answer = None
-        while answer is None:
-            answer = input("Are you an alien?")
-            if answer.lower() == "no" or answer.lower() == "n":
-                print("Then that makes you a very old person.")
-            else: print("In whatever alien language that was, alright. I believe you. Go on.")
     else:
         print("Excellent.")
 
-# Now we will reinforce user's password with his year of birth
-print("Now we will reinforce your password", userstring, "with your year of birth")
+# Now we will reinforce user's password with his reversed year of birth
+userdateofbirth = userdateofbirth[::-1]
+
+print("Now we will reinforce your password", userstring)
+print("with your reversed year of birth", userdateofbirth)
 userstring = userstring + userdateofbirth
 
 # Outputting a new password
 print("Your newly created password is", userstring)
+print("Thank you for using our password creator!")
